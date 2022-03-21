@@ -7,6 +7,7 @@ from action_enum import action_enum
 
 import wyvern_logins
 import cglogging as cgl
+from flight_bridge import login_accessor
 
 logger_Class = cgl.cglogging()
 logger = logger_Class.setup_logging()
@@ -33,19 +34,10 @@ class RequestRouter:
 
         if action.upper() == action_enum.SubmitLogin.name.upper():
             logger.debug("submit login")
-            response = wyvern_logins.submit_login_handler_request(request)
+            response = login_accessor.submit_login(request)
             logger.debug(json.dumps(response))
         elif action.upper() == action_enum.DeleteLogin.name.upper():
             logger.debug("delete login")
-            response = wyvern_logins.delete_login(request)
-        # else:
-        #     return_code, key = wyvern_logins.logon(request)
-        #     if return_code != 0:
-        #         return message.get_fatal_standard_message(return_code)
-
-        # temp hard coded link, this will be pulled by the user in the future
-        if action.upper() == action_enum.UpdatePilots.name.upper():
-            logger.debug("getting airaft and child details")
-            response = process_pilots_update.update_hours(request)
+            response = login_accessor.deactivate_login(request)
 
         return response
